@@ -1,3 +1,5 @@
+[![](https://img.shields.io/docker/cloud/build/ipbhalle/ccdbc.svg)](https://hub.docker.com/r/ipbhalle/ccdbc/builds/)
+
 # ccdbc
 _Combined Chemistry DataBase Cartridges_
 
