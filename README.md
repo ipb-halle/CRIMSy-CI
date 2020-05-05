@@ -7,3 +7,7 @@ This project combines the database extensions [pgchem](https://github.com/ergo70
 
 This project is a spin-off of [CRIMSy](https://github.com/ipb-halle/CRIMSy) and our NatBase project (yet unpublished).
 
+When setting up your database, please activate the extensions with the following SQL commands:
+
+    CREATE EXTENSION IF NOT EXISTS "pgchem_tigress";
+    CREATE EXTENSION IF NOT EXISTS "rdkit";
