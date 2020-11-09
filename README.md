@@ -11,3 +11,10 @@ When setting up your database, please activate the extensions with the following
 
     CREATE EXTENSION IF NOT EXISTS "pgchem_tigress";
     CREATE EXTENSION IF NOT EXISTS "rdkit";
+    
+# More docs
+
+The container is based on the official PostgreSQL container, so all info from https://hub.docker.com/_/postgres and in particular https://github.com/docker-library/docs/blob/master/postgres/README.md applies.
+
+The `pgchem_tigress` extension was developed by Ernst-Georg Schmid
+and can be found at https://github.com/ergo70/pgchem_tigress/.
