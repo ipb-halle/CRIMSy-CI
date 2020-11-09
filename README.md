@@ -3,7 +3,9 @@
 # ccdbc
 _Combined Chemistry DataBase Cartridges_
 
-This project combines the database extensions [pgchem](https://github.com/ergo70/pgchem_tigress) and [RDKit](https://github.com/rdkit/rdkit) in a single [PostgreSQL 11](https://www.postgresql.org/) Docker image.
+This project combines the database extensions [pgchem](https://github.com/ergo70/pgchem_tigress) and [RDKit](https://github.com/rdkit/rdkit) in a single [PostgreSQL 11](https://www.postgresql.org/) Docker image, that can be started with e.g. 
+
+    docker run -e POSTGRES_PASSWORD="your-OWN-password" -v /path/to/your/storage:/var/lib/postgresql/data ipbhalle/ccdbc
 
 This project is a spin-off of [CRIMSy](https://github.com/ipb-halle/CRIMSy) and our NatBase project (yet unpublished).
 
@@ -18,3 +20,8 @@ The container is based on the official PostgreSQL container, so all info from ht
 
 The `pgchem_tigress` extension was developed by Ernst-Georg Schmid
 and can be found at https://github.com/ergo70/pgchem_tigress/.
+
+The RDkit cartridge is described at https://www.rdkit.org/docs/Cartridge.html.
+
+Have fun!
+
