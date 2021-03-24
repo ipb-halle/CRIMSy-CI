@@ -1,0 +1,11 @@
+71c71,73
+<       target_link_libraries(MolDraw2D PUBLIC Freetype::Freetype)
+---
+>       add_library(Freetype::Freetype UNKNOWN IMPORTED)
+>       target_include_directories(MolDraw2D PUBLIC ${FREETYPE_INCLUDE_DIRS})
+>       target_link_libraries(MolDraw2D PUBLIC ${FREETYPE_LIBRARIES})
+73c75,76
+<         target_link_libraries(MolDraw2D_static PUBLIC Freetype::Freetype)
+---
+>         target_link_libraries(MolDraw2D_static PUBLIC ${FREETYPE_LIBRARIES})
+>         target_include_directories(MolDraw2D_static PUBLIC ${FREETYPE_INCLUDE_DIRS})

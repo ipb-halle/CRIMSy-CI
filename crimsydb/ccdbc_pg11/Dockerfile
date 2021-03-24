@@ -24,7 +24,7 @@
 #   CREATE EXTENSION IF NOT EXISTS "pgchem_tigress";
 #   CREATE EXTENSION IF NOT EXISTS "rdkit";
 #
-# To build the image run "docker build -t ccdbc:pg11" in this directory
+# To build the image run "docker build -t ccdbc:pg11 ." in this directory
 #
 # Acknowledgment:
 # rdkit installation inspired by Tim Dudgeon <tdudgeon@informaticsmatters.com>
@@ -35,8 +35,11 @@
 FROM postgres:11
 LABEL maintainer="Frank Broda <fbroda@ipb-halle.de>"
 
+# patch freetype issue 
+COPY ./patch.20210311.txt /tmp/
+
 # these statements must be on separate lines
-ENV RDKIT_RELEASE=Release_2019_09_1 
+ENV RDKIT_RELEASE=Release_2020_09_4 
 ENV RDBASE=/opt/rdkit-$RDKIT_RELEASE 
 ENV PYTHONPATH=$PYTHONPATH:$RDBASE \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RDBASE/lib:/usr/lib/x86_64-linux-gnu
@@ -47,7 +50,7 @@ RUN set -x  \
  && echo "deb-src http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg-src.list \
  && apt-get update \
  && apt-get install -y libboost-dev libboost-system-dev libboost-thread-dev libboost-serialization-dev \
- && apt-get install -y libboost-python-dev libboost-regex-dev libboost-iostreams-dev 
+ && apt-get install -y libboost-python-dev libboost-regex-dev libboost-iostreams-dev libfreetype6
 
 #
 # save installation state
@@ -71,7 +74,7 @@ RUN set -x \
   && apt-mark showmanual > apt-mark.manual \
   && apt-get install -y --no-install-recommends ca-certificates wget unzip cmake zlib1g-dev apt-utils \
   && apt-get install -y --force-yes --no-upgrade postgresql-server-dev-$PG_MAJOR "libpq5=$PG_MAJOR*" "libpq-dev=$PG_MAJOR*" \
-  && apt-get install -y python-numpy python-dev sqlite3 libsqlite3-dev \
+  && apt-get install -y python-numpy python-dev sqlite3 libsqlite3-dev libfreetype6-dev \
   && apt-get install -y postgresql-plpython-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
   && apt-get build-dep -y --no-upgrade libpq-dev \
   && rm -rf /var/lib/apt/lists/* \
@@ -106,6 +109,8 @@ RUN set -x \
   && wget -O /opt/rdkit.zip https://github.com/rdkit/rdkit/archive/$RDKIT_RELEASE.zip \
   && unzip rdkit.zip \
   && mkdir -p $RDBASE/build \
+  && cd $RDBASE \
+  && patch -i /tmp/patch.20210311.txt Code/GraphMol/MolDraw2D/CMakeLists.txt \
   && cd $RDBASE/build \
   && cmake -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_PGSQL=ON -DPostgreSQL_ROOT=/usr/lib/postgresql/$PG_MAJOR \
      -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql/$PG_MAJOR/server -DPYTHON_EXECUTABLE=python3 .. \
