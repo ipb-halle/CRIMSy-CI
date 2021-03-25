@@ -24,22 +24,22 @@ $PHASE_END=5;
 
 $phase = $PHASE_START;
 
-$use_bingo = False;
-$use_pgchem = False;
-$use_rdkit = False;
-$run_init = False;
+$use_bingo = 0;
+$use_pgchem = 0;
+$use_rdkit = 0;
+$run_init = 0;
 
 @PROPNAMES = [];
 
 for my $arg ( @ARGV ) {
     if ($arg eq "--init") {
-        $run_init = True;
+        $run_init = 1;
     } elsif ($arg eq "--bingo") {
-        $use_bingo = True;
+        $use_bingo = 1;
     } elsif ($arg eq "--pgchem") {
-        $use_pgchem = True;
+        $use_pgchem = 1;
     } elsif ($arg eq "--rdkit") {
-        $use_rdkit = True;
+        $use_rdkit = 1;
     } else {
         $filename = $arg;
     }

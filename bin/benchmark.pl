@@ -17,31 +17,32 @@
 #
 use DBI;
 
-$use_bingo = False;
-$use_pgchem = False;
-$use_rdkit = True;
-$run_init = False;
+$use_bingo = 0;
+$use_pgchem = 0;
+$use_rdkit = 0;
+$run_init = 0;
 $count = 0;
 
 $dbh = DBI->connect("dbi:Pg:dbname=test;host=localhost;port=5432", 
   'test', 'test', {AutoCommit => 1});
 
 for my $arg ( @ARGV ) {
-    if ($arg =~ "--count=") {
-        $run_init = True;
+    if ($arg =~ /^--count=[0-9]+/) {
+        $run_init = 1;
         $count = (split "=", $arg)[1];
     } elsif ($arg eq "--bingo") {
-        $use_bingo = True;
+        $use_bingo = 1;
     } elsif ($arg eq "--pgchem") {
-        $use_pgchem = True;
+        $use_pgchem = 1;
     } elsif ($arg eq "--rdkit") {
-        $use_rdkit = True;
+        $use_rdkit = 1;
     } else {
         die "invalid argument: $arg";
     }
 }
 
 if ($run_init) {
+        print "Initializing\n";
         &initDB($count);
         exit(0);
 }
@@ -131,8 +132,8 @@ sub initDB() {
         bingo_stop TIMESTAMP,
         pgchem_count INTEGER,
         pgchem_start TIMESTAMP,
-        pgchem_stop TIMESTAMP
-        rdkit_count INTEGER, ,
+        pgchem_stop TIMESTAMP,
+        rdkit_count INTEGER, 
         rdkit_start TIMESTAMP, 
         rdkit_stop TIMESTAMP)";
 
