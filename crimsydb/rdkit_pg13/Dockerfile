@@ -2,7 +2,7 @@
 #  CCDBC
 #  Combined Chemistry DataBase Cartridge
 #
-#  Copyright 2019-2021 Leibniz-Institut f. Pflanzenbiochemie
+#  Copyright 2019 Leibniz-Institut f. Pflanzenbiochemie
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -18,22 +18,12 @@
 #
 #====================================================================
 #
-# NOTE: pgchem::tigress BUILDS ON OpenBabel WHICH IS GPL LICENSED! THE 
-# ABOVE LICENSE STATEMENTS APPLIES TO THIS FILE ONLY AND ANY USE OF THE 
-# RESULTING CONTAINER IMAGE MUST MEET THE LICENSE REQUIREMENTS OF ALL 
-# INVOLVED COMPONENTS!
+# Docker container with PostgreSQL 13 and rdkit. Please use the following 
+# rdkit into your database:
 #
-#====================================================================
-#
-#
-# Docker container with PostgreSQL 11, OpenBabel 2.4.1, pgchem_tigress
-# and rdkit. Please use the following statements to install pgchem_tigress 
-# and/or rdkit into your database:
-#
-#   CREATE EXTENSION IF NOT EXISTS "pgchem_tigress";
 #   CREATE EXTENSION IF NOT EXISTS "rdkit";
 #
-# To build the image run "docker build -t crimsydb:ccdbc_pg11 ." in this directory
+# To build the image run "docker build -t crimsydb:rdkit_pg13 ." in this directory
 #
 # Acknowledgment:
 # rdkit installation inspired by Tim Dudgeon <tdudgeon@informaticsmatters.com>
@@ -41,11 +31,10 @@
 # Author: Frank Broda (fbroda@ipb-halle.de)
 #
 #
-FROM postgres:11
+FROM postgres:13
 LABEL maintainer="Frank Broda <fbroda@ipb-halle.de>"
 
 # patch freetype issue 
-COPY ./patch.20210311.txt /tmp/
 
 # these statements must be on separate lines
 ENV RDKIT_RELEASE=Release_2020_09_4 
@@ -65,17 +54,9 @@ RUN set -x  \
 # save installation state
 # install tools (wget, unzip, cmake, ...) 
 # install development tools
-# download openbabel, pgchem
-# configure, build and install openbabel
-# build and install pgchem (incl. libbarsoi.so)
-#   --> this includes minor modification to openbabel
 # build and install rdkit 
 # purge unneeded packages / clean up (may be incomplete for RDKit)
-# silence complaints about missing dictionary.txt 
-#   --> empty file, see: https://github.com/sneumann/pgchem/blob/master/setup/tigressdata.zip
-#
-# line 76 fixes a build problem in pgchem_tigress against postgresql 9.x and 
-# is not necessary in later versions
+#  && apt-get install -y postgresql-plpython-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
 #
 RUN set -x \
   && mkdir -p /opt/pgchem \
@@ -84,42 +65,17 @@ RUN set -x \
   && apt-get install -y --no-install-recommends ca-certificates wget unzip cmake zlib1g-dev apt-utils \
   && apt-get install -y --force-yes --no-upgrade postgresql-server-dev-$PG_MAJOR "libpq5=$PG_MAJOR*" "libpq-dev=$PG_MAJOR*" \
   && apt-get install -y python-numpy python-dev sqlite3 libsqlite3-dev libfreetype6-dev \
-  && apt-get install -y postgresql-plpython-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
   && apt-get build-dep -y --no-upgrade libpq-dev \
   && rm -rf /var/lib/apt/lists/* \
   && (ln -s  /usr/include/postgresql/$PG_MAJOR/server/libpq/md5.h  /usr/include/postgresql/$PG_MAJOR/server/common/md5.h \
     || echo "INFO: failed to create compatibility link - continuing") \
-  && echo "INFO: Installing pgChem" \
-  && wget -O /opt/pgchem/openbabel-2-4-1.tar.gz https://github.com/openbabel/openbabel/archive/openbabel-2-4-1.tar.gz \
-  && wget -O /opt/pgchem/pgchem.zip https://github.com/ergo70/pgchem_tigress/archive/master.zip \
-  && tar -xzf openbabel-2-4-1.tar.gz \
-  && cd /opt/pgchem/openbabel-openbabel-2-4-1 \
-  && mkdir build \
-  && cd build \
-  && cmake .. \
   && NUMCPU=`lscpu -e | grep yes | wc -l` \
-  && make -j $NUMCPU \
-  && make install \
-  && cd /opt/pgchem \
-  && unzip pgchem.zip \
-  && cd /opt/pgchem/pgchem_tigress-master/src \
-  && mv openbabel-2.4.1 openbabel-2.4.1-orig \
-  && ln -s /opt/pgchem/openbabel-openbabel-2-4-1 openbabel-2.4.1 \
-  && mv openbabel-2.4.1/include/openbabel/locale.h openbabel-2.4.1/include/openbabel/_locale.h \
-  && cd barsoi \
-  && make -f Makefile.linux \
-  && cp libbarsoi.so /usr/local/lib \
-  && cd .. \
-  && export USE_PGXS=1 \
-  && make -j $NUMCPU \
-  && make install \
   && echo "INFO: Installing RDKit" \
   && cd /opt \
   && wget -O /opt/rdkit.zip https://github.com/rdkit/rdkit/archive/$RDKIT_RELEASE.zip \
   && unzip rdkit.zip \
   && mkdir -p $RDBASE/build \
   && cd $RDBASE \
-  && patch -i /tmp/patch.20210311.txt Code/GraphMol/MolDraw2D/CMakeLists.txt \
   && cd $RDBASE/build \
   && cmake -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_PGSQL=ON -DPostgreSQL_ROOT=/usr/lib/postgresql/$PG_MAJOR \
      -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql/$PG_MAJOR/server -DPYTHON_EXECUTABLE=python3 .. \
@@ -135,6 +91,5 @@ RUN set -x \
   && cat apt-mark.manual | xargs -l1 apt-mark manual \
   && apt-get purge -y --auto-remove \
   && cd /opt \
-  && rm -r pgchem rdkit.zip \
-  && touch /usr/local/share/openbabel/2.4.1/dictionary.txt 
+  && rm -r rdkit.zip 
 

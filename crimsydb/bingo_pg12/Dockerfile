@@ -16,16 +16,16 @@
 #
 #====================================================================
 #
-# To build the image run "docker build -t crimsydb:bingo_pg11 ." in this directory
+# To build the image run "docker build -t crimsydb:bingo_pg12 ." in this directory
 #
 #
 # STAGE 0
 #
-FROM postgres:11
+FROM postgres:12
 
 # these statements must be on separate lines
 ENV INDIGO_RELEASE=indigo-1.4.3
-ENV BINGO_PG_VERSION=11
+ENV BINGO_PG_VERSION=12
 ENV PYTHONPATH=$PYTHONPATH:$RDBASE \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RDBASE/lib:/usr/lib/x86_64-linux-gnu
 #
@@ -41,13 +41,14 @@ RUN set -x  \
 # download indigo toolkit
 # configure, build and install 
 # save artifacts in /opt/bingo for use in next stage
+
+#  && apt-get install -y postgresql-plpython-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
 #
 RUN set -x \
   && mkdir -p /opt/bingo \
   && cd /opt/bingo \
   && apt-get install -y --no-install-recommends ca-certificates wget cmake \
   && apt-get install -y --force-yes --no-upgrade postgresql-server-dev-$PG_MAJOR "libpq5=$PG_MAJOR*" "libpq-dev=$PG_MAJOR*" \
-  && apt-get install -y postgresql-plpython-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
   && apt-get build-dep -y --no-upgrade libpq-dev \
   && rm -rf /var/lib/apt/lists/* \
   && (ln -s  /usr/include/postgresql/$PG_MAJOR/server/libpq/md5.h  /usr/include/postgresql/$PG_MAJOR/server/common/md5.h \
@@ -59,7 +60,7 @@ RUN set -x \
   && python3 ./build_scripts/bingo-release.py --preset=linux64 --dbms=postgres \
   && cd bingo/postgres/libs \
   && cp lib/bingo_postgres.so /opt/bingo \
-  && /bin/sh ./bingo-pg-install.sh -libdir /usr/lib/postgresql/11/lib -y \
+  && /bin/sh ./bingo-pg-install.sh -libdir /usr/lib/postgresql/12/lib -y \
   && cp bingo_*install.sql /opt/bingo
 
 #
@@ -67,13 +68,13 @@ RUN set -x \
 #
 # STAGE 1
 #
-FROM postgres:11
+FROM postgres:12
 LABEL maintainer="Frank Broda <fbroda@ipb-halle.de>"
 
 RUN mkdir -p /opt/bingo
 COPY --from=0 /opt/bingo/bingo_install.sql /opt/bingo
 COPY --from=0 /opt/bingo/bingo_uninstall.sql /opt/bingo
-COPY --from=0 /opt/bingo/bingo_postgres.so /usr/lib/postgresql/11/lib 
+COPY --from=0 /opt/bingo/bingo_postgres.so /usr/lib/postgresql/12/lib 
 
 #
 # Steps to finalize the installation:
