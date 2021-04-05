@@ -26,13 +26,11 @@ FROM postgres:12
 # these statements must be on separate lines
 ENV INDIGO_RELEASE=indigo-1.4.3
 ENV BINGO_PG_VERSION=12
-ENV PYTHONPATH=$PYTHONPATH:$RDBASE \
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RDBASE/lib:/usr/lib/x86_64-linux-gnu
 #
 # install postgresql source repository
 #
 RUN set -x  \
- && echo "deb-src http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg-src.list \
+ && echo "deb-src http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg-src.list \
  && apt-get update 
 
 #
@@ -60,7 +58,7 @@ RUN set -x \
   && python3 ./build_scripts/bingo-release.py --preset=linux64 --dbms=postgres \
   && cd bingo/postgres/libs \
   && cp lib/bingo_postgres.so /opt/bingo \
-  && /bin/sh ./bingo-pg-install.sh -libdir /usr/lib/postgresql/12/lib -y \
+  && /bin/sh ./bingo-pg-install.sh -libdir /usr/lib/postgresql/$PG_MAJOR/lib -y \
   && cp bingo_*install.sql /opt/bingo
 
 #
@@ -74,7 +72,7 @@ LABEL maintainer="Frank Broda <fbroda@ipb-halle.de>"
 RUN mkdir -p /opt/bingo
 COPY --from=0 /opt/bingo/bingo_install.sql /opt/bingo
 COPY --from=0 /opt/bingo/bingo_uninstall.sql /opt/bingo
-COPY --from=0 /opt/bingo/bingo_postgres.so /usr/lib/postgresql/12/lib 
+COPY --from=0 /opt/bingo/bingo_postgres.so /usr/lib/postgresql/$PG_MAJOR/lib 
 
 #
 # Steps to finalize the installation:
