@@ -7,7 +7,7 @@ This project provides a collection of container images for use with [CRIMSy](htt
  * An PostgreSQL image augmented with an extension for chemical structure handling (currently used: Bingo [https://github.com/epam/Indigo](https://github.com/epam/Indigo))
  * An Apache HTTP Server image containing a selection of JavaScript libraries for chemical drawing and spectra display
 
-Additionally, this project provides Dockerfiles for experimenting with additional PostgreSQL releases and database extensions: ([RDKit](https://www.rdkit.org/docs/Cartridge.html) and [pgchem::tigress](https://github.com/ergo70/pgchem_tigress/) 
+Additionally, this project provides Dockerfiles for experimenting with additional PostgreSQL releases and database extensions: ([RDKit](https://www.rdkit.org/docs/Cartridge.html) and [pgchem::tigress](https://github.com/ergo70/pgchem_tigress/))
 
 # Getting started
 To set up a fresh database container, usually the following sequence of commands is needed:
