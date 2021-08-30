@@ -4,11 +4,11 @@
 #
 #
 #
-p=`realpath $0`
-DIR=`dirname "$p"`
+p=`dirname $0`
+DIR=`realpath "$p/.."`
 
-mkdir -p $DIR/../data
-cd $DIR/../data
+mkdir -p $DIR/data
+cd $DIR/data
 
 wget -r -c \
   --limit-rate=300k \

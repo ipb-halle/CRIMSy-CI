@@ -7,6 +7,8 @@ This project provides a collection of container images for use with [CRIMSy](htt
  * An PostgreSQL image augmented with an extension for chemical structure handling (currently used: Bingo [https://github.com/epam/Indigo](https://github.com/epam/Indigo))
  * An Apache HTTP Server image containing a selection of JavaScript libraries for chemical drawing and spectra display
 
+The build script `bin/build.sh` can be used to build (selected) images and upload them to e.g. [docker hub](https://hub.docker.com/registry/docker/ipbhalle).
+
 Additionally, this project provides Dockerfiles for experimenting with additional PostgreSQL releases and database extensions: ([RDKit](https://www.rdkit.org/docs/Cartridge.html) and [pgchem::tigress](https://github.com/ergo70/pgchem_tigress/))
 
 # Getting started
@@ -56,7 +58,7 @@ The containers are based on the official Apache httpd and PostgreSQL containers,
  * Apache httpd: [https://hub.docker.com/_/httpd](https://hub.docker.com/_/httpd) and [https://github.com/docker-library/docs/blob/master/httpd/README.md](https://github.com/docker-library/docs/blob/master/httpd/README.md)
  * PostgreSQL:  [https://hub.docker.com/_/postgres](https://hub.docker.com/_/postgres) and [https://github.com/docker-library/docs/blob/master/postgres/README.md](https://github.com/docker-library/docs/blob/master/postgres/README.md)
  * Bingo: [https://github.com/epam/Indigo](https://github.com/epam/Indigo) and [https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)
- * RDKit: [https://www.rdkit.org/docs/Cartridge.html](https://www.rdkit.org/docs/Cartridge.html) and [
+ * RDKit: [https://www.rdkit.org/docs/Cartridge.html](https://www.rdkit.org/docs/Cartridge.html)
  * pgchem::tigress: [https://github.com/ergo70/pgchem_tigress/](https://github.com/ergo70/pgchem_tigress/) Please note that pgchem::tigress builds on GPL licensed [OpenBabel](http://openbabel.org).
 
 Have fun!
