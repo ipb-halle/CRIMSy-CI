@@ -30,7 +30,7 @@ ENV BINGO_PG_VERSION=12
 # install postgresql source repository
 #
 RUN set -x  \
- && echo "deb-src http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg-src.list \
+ && echo "deb-src http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg-src.list \
  && apt-get update 
 
 #
@@ -46,7 +46,7 @@ RUN set -x \
   && mkdir -p /opt/bingo \
   && cd /opt/bingo \
   && apt-get install -y --no-install-recommends ca-certificates wget cmake \
-  && apt-get install -y --force-yes --no-upgrade postgresql-server-dev-$PG_MAJOR "libpq5=$PG_MAJOR*" "libpq-dev=$PG_MAJOR*" \
+  && apt-get install -y --allow-downgrades --no-upgrade postgresql-server-dev-$PG_MAJOR "libpq5=$PG_MAJOR*" "libpq-dev=$PG_MAJOR*" \
   && apt-get build-dep -y --no-upgrade libpq-dev \
   && rm -rf /var/lib/apt/lists/* \
   && (ln -s  /usr/include/postgresql/$PG_MAJOR/server/libpq/md5.h  /usr/include/postgresql/$PG_MAJOR/server/common/md5.h \
