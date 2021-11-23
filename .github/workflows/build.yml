@@ -1,8 +1,15 @@
+#
+# run on push and every Thursday 8:42 am
+#
+#
 name: build docker images
 
 on:
   push:
     branches: master
+
+  schedule:
+    cron: '42 8 * * 4'
 
 jobs:
   login:
