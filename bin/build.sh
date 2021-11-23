@@ -7,9 +7,15 @@
 p=`dirname $0`
 DIR=`realpath "$p/.."`
 
+cleanup() {
+    echo "build process has failed"
+}
+
+trap "cleanup; exit 1" ERR
+
 cd "$DIR" 
  grep --include Dockerfile -rhE "^FROM " . | \
-   cut -d' ' -f2- | sort | uniq | \
+   cut -d' ' -f2- | tr -d ' ' | sort | uniq | \
    xargs -l1 docker pull 
 
 cd "$DIR/crimsyplugins" 

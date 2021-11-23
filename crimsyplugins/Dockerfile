@@ -26,7 +26,7 @@ FROM curlimages/curl
 COPY ./download.sh /
 RUN /download.sh
 
-FROM httpd 
+FROM httpd
 
 #
 RUN rm -rf /usr/local/apache2/htdocs/*
