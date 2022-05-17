@@ -3,7 +3,7 @@
 MOLPAINTJS_RELEASE=v0.3.5-alpha
 OPENCHEMLIBJS_RELEASE=7.4.2
 SPECKTACKLE_RELEASE=v0.0.5-ipb
-OPENVECTOREDITOR_RELEASE=16.3.18
+OPENVECTOREDITOR_RELEASE=17.5.1
 MINIPAINT_RELEASE=4.9.1
 
 MOLPAINTJS_URL=https://github.com/ipb-halle/MolPaintJS/releases/download/$MOLPAINTJS_RELEASE
@@ -40,8 +40,8 @@ fc3490f9a0612a3135a4f5c274dc0b079532b0dccd227159bbc6da4445adf6ae  openchemlibjs/
 38dc3aed3def8cc4dd15ac879daa4af9b0d71af86fef82611ca1752497c6f464  openchemlibjs/LICENSE
 002f4c1871cb0c39a53f38a0350139aab385cade4e6e54bad339cc1ea429c70d  specktackle/st.min.js
 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  specktackle/license.txt
-88ec80b623069665051cca04bc29764df508656792e23acee7ca0060318edb78  openvectoreditor/open-vector-editor.min.js
-7cc916424bf20811b989b6329acf2453c07be24d2a5477775282e72846beb604  openvectoreditor/main.css
+a2b3a1a93b4dd545cc53c6060c95067b400772c67874617824c719df20ae70e3  openvectoreditor/open-vector-editor.min.js
+4f036a3ec073af3a5dda67b5f2560e8d4686e87d4d6f264c96e3ec4f8a8247da  openvectoreditor/main.css
 63274c0963ad116c21ca088c98387d132c232b7008c934449bf2c2977643bf0b  openvectoreditor/LICENSE
 96213c861832946dedc2845c04965e186e69f0d0383f9c8d18fac88a9abc6dfe  miniPaint.tar.gz
 EOF
